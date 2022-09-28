@@ -46,7 +46,10 @@
 
 ## Задание 2
 Установил Unity
+
+
 ![image](https://user-images.githubusercontent.com/114616168/192891129-f93a67d0-8003-4fe8-96df-1bd2c8b00bf9.png)
+
 Создал папку для скриптов, пустой объект, написал код и вывел в консоль:
 ![image](https://user-images.githubusercontent.com/114616168/192891352-346bbe06-5e49-4123-9b91-4471b70e6e8b.png)
 ![image](https://user-images.githubusercontent.com/114616168/192891264-26c20bd8-2c1b-438a-9c08-b94c10955eae.png)
