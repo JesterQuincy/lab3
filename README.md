@@ -70,7 +70,8 @@
 ![image](https://user-images.githubusercontent.com/114616168/192899356-dafc0461-ed3e-4128-ae90-5648b5feb3e4.png)
 Шаг 3 Третья итерация показывает значения параметров, значения потерь и визуализацию после итерации 
 
-![image](https://user-images.githubusercontent.com/114616168/192903785-f12a1b47-6778-42b7-b362-e6c601883f56.png)
+![image](https://user-images.githubusercontent.com/114616168/192904040-dcf437c8-6d31-4370-824d-9da24a6507d4.png)
+
 
 Шаг 4 На четвертой итерации отображаются значения параметров, значения потерь и эффекты визуализации 
 ![image](https://user-images.githubusercontent.com/114616168/192899850-3bd2b7b0-4dae-4da5-88ba-5385c68b5a44.png)
