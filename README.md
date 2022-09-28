@@ -104,9 +104,10 @@ Lr = 0.000001
 
 ![image](https://user-images.githubusercontent.com/114616168/192902430-3826d413-dcf2-4ea4-8070-c04a7a09cd66.png)
 
-Lr = 0.0001 
+Lr = 0.0006 
 
-![image](https://user-images.githubusercontent.com/114616168/192903020-c1272be4-4f47-4b52-a3e8-b2ece059281a.png)
+![image](https://user-images.githubusercontent.com/114616168/192904600-1089bcea-fe39-44a7-93b7-2506b4086bcb.png)
+
 
 ## Выводы
 Узнал новые программы, немного про обучение моделей и параметры которые используется.
