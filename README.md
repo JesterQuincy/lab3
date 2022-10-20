@@ -117,7 +117,8 @@ public class RollerAgent : Agent
 
 ![Screenshot_1](https://user-images.githubusercontent.com/101480666/196696354-f651390d-36ed-4c8d-a92d-105553aade1a.jpg)
 
-![bandicam 2022-10-19 15-55-28-952](https://user-images.githubusercontent.com/101480666/196697154-fecabc45-c6f0-4e2b-bd12-9528033f776d.gif)
+![image](https://user-images.githubusercontent.com/114616168/196924307-bba8e8cc-a2a0-4d09-879a-a06dd6b75738.png)
+
 
 
 ## Задание 2
