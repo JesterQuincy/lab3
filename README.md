@@ -8,7 +8,7 @@
 | ------ | ------ | ------ |
 | Задание 1 | * | 60 |
 | Задание 2 | * | 20 |
-| Задание 3 | # | 20 |
+| Задание 3 | * | 20 |
 
 знак "*" - задание выполнено; знак "#" - задание не выполнено;
 
@@ -55,7 +55,7 @@ o	torch 1.7.1;
 Создадем виртуальное окружение.
 После этого добавим скрипт шару и еще добавим Decision Requester и Behavior Parameters:
 Скрипт:
-`
+```C#
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -107,7 +107,17 @@ public class RollerAgent : Agent
         }
     }
 }
-`
+```
+5. Еще добавим файл конфигурации нейронной сети в проект и запустим работу ml-агена:
+
+![Screenshot_2](https://user-images.githubusercontent.com/101480666/196695668-e3aca74a-7f2b-41b0-92c3-a57d0d5eed23.jpg)
+
+6. После я сделал несколько копий модели и обучил их, теперь можно проверить работу модели:
+
+![Screenshot_1](https://user-images.githubusercontent.com/101480666/196696354-f651390d-36ed-4c8d-a92d-105553aade1a.jpg)
+
+![bandicam 2022-10-19 15-55-28-952](https://user-images.githubusercontent.com/101480666/196697154-fecabc45-c6f0-4e2b-bd12-9528033f776d.gif)
+
 
 ## Задание 2
 Срипт для обучния модели с помощью линейной регресии 
