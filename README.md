@@ -108,11 +108,12 @@ public class RollerAgent : Agent
     }
 }
 ```
-5. Еще добавим файл конфигурации нейронной сети в проект и запустим работу ml-агена:
+Запустим работу ml-агена:
 
-![Screenshot_2](https://user-images.githubusercontent.com/101480666/196695668-e3aca74a-7f2b-41b0-92c3-a57d0d5eed23.jpg)
+![194754553-ec0a1776-2c71-41da-9820-d87992b622eb](https://user-images.githubusercontent.com/114616168/196921043-aa051b5d-f77a-4c79-8895-ee37bf7b5193.png)
 
-6. После я сделал несколько копий модели и обучил их, теперь можно проверить работу модели:
+
+Обучил созданные модели
 
 ![Screenshot_1](https://user-images.githubusercontent.com/101480666/196696354-f651390d-36ed-4c8d-a92d-105553aade1a.jpg)
 
@@ -120,10 +121,139 @@ public class RollerAgent : Agent
 
 
 ## Задание 2
-Срипт для обучния модели с помощью линейной регресии 
-![image](https://user-images.githubusercontent.com/114616168/194242570-30e5bb8f-22ac-41da-abed-ba46139e9cb4.png)
+### Подробно опишите каждую строку файла конфигурации нейронной сети, доступного в папке с файлами проекта по ссылке. Самостоятельно найдите информацию о компонентах Decision Requester, Behavior Parameters, добавленных сфере.
 
+```
+behaviors: #Создание списка модель поведения
+  RollerBall: #Создание списка отдельного объекта
+    trainer_type: ppo #Тип тренажера
+      batch_size: 10 #Количество опытов на каждой итерации градиентного спуска. Это всегда должно быть в несколько раз меньше, чем buffer_size. 
+      buffer_size: 100 #Количество опыта, которое необходимо собрать перед обновлением
+      learning_rate: 3.0e-4 #Начальная скорость обучения 
+      beta: 5.0e-4 #Сила регуляризации энтропии, делает политику рандомной
+      epsilon: 0.2 #Влияет на то, насколько быстро политика может развиваться во время обучения
+      lambd: 0.99 #Параметр регуляризации (лямбда), используемый при вычислении обобщенной оценки преимуществ (GAE).
+      num_epoch: 3 #Количество проходов через буфер опыта при выполнении оптимизации градиентного спуска.
+      learning_rate_schedule: linear #Определяет, как скорость обучения меняется с течением времени. linear линейно уменьшает скорость обучения.
+    network_settings:
+      normalize: false #Применяется ли нормализация к входным данным векторного наблюдения.
+      hidden_units: 128 #Количество единиц в скрытых слоях нейронной сети.
+      num_layers: 2 #Количество скрытых слоев в нейронной сети. 
+    reward_signals: #Награды
+      extrinsic: #Внешние награды
+        gamma: 0.99 #Коэффициент скидки для будущих вознаграждений, поступающих из среды.
+        strength: 1.0 #Коэффициент, на который умножается вознаграждение, предоставляемое средой.
+    max_steps: 500000 #Общее количество шагов 
+    time_horizon: 64 #Сколько шагов опыта нужно собрать для каждого агента, прежде чем добавлять его в буфер опыта. 
+    summary_freq: 10000 #Количество опыта, которое необходимо собрать перед созданием и отображением статистики обучения. 
+```
+Компонент DecisionRequester предоставляет удобный и гибкий способ запуска процесса принятия решений агентом. Без DecisionRequester внедрение вашего агента должно вручную вызывать его функцию RequestDecision() 
+Компонент Behavior Parameters (параметры поведения) определяет, как объект принимает решения.
 
+## Задание 3
+### Доработайте сцену и обучите ML-Agent таким образом, чтобы шар перемещался между двумя кубами разного цвета. Кубы должны, как и впервом задании, случайно изменять кооринаты на плоскости. 
+
+Решение:
+
+1. Создадим еще один куб:
+
+![Screenshot_1](https://user-images.githubusercontent.com/101480666/196702304-235099ad-0497-4f32-be87-380fe5dd85fa.jpg)
+
+2. После надо отредактировать код для двух:
+```C#
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using Unity.MLAgents;
+using Unity.MLAgents.Sensors;
+using Unity.MLAgents.Actuators;
+
+public class RollerAgent : Agent
+{
+    Rigidbody rBody;
+    void Start()
+    {
+        rBody = GetComponent<Rigidbody>();
+    }
+    public GameObject Target1;
+    public GameObject Target2;
+    private bool target1Collected;
+    private bool target2Collected;
+    public override void OnEpisodeBegin()
+    {
+        if (this.transform.localPosition.y < 0)
+    {
+        this.rBody.angularVelocity = Vector3.zero;
+        this.rBody.velocity = Vector3.zero;
+        this.transform.localPosition = new Vector3(0, 0.5f, 0);
+    }
+    Target1.transform.localPosition = new Vector3(Random.value * 8-4, 0.5f, Random.value * 8-4);
+    Target2.transform.localPosition = new Vector3(Random.value * 8-4, 0.5f, Random.value * 8-4);
+    Target1.SetActive(true);
+    Target2.SetActive(true);
+    target1Collected = false;
+    target2Collected = false;
+    }
+    public override void CollectObservations(VectorSensor sensor)
+    {
+    sensor.AddObservation(Target1.transform.localPosition);
+    sensor.AddObservation(Target2.transform.localPosition);
+    sensor.AddObservation(this.transform.localPosition);
+    sensor.AddObservation(target1Collected);
+    sensor.AddObservation(target2Collected);
+    sensor.AddObservation(rBody.velocity.x);
+    sensor.AddObservation(rBody.velocity.z);
+    }
+    public float forceMultiplier = 10;
+    public override void OnActionReceived(ActionBuffers actionBuffers)
+    {Vector3 controlSignal = Vector3.zero;
+    controlSignal.x = actionBuffers.ContinuousActions[0];
+    controlSignal.z = actionBuffers.ContinuousActions[1];
+    rBody.AddForce(controlSignal * forceMultiplier);
+    float distanceToTarget1 = Vector3.Distance(this.transform.localPosition, Target1.transform.localPosition);
+    float distanceToTarget2 = Vector3.Distance(this.transform.localPosition, Target2.transform.localPosition);
+    if (!target1Collected & distanceToTarget1 < 1.42f)
+    {
+        target1Collected = true;
+        Target1.SetActive(false);
+    }
+    if (!target2Collected & distanceToTarget2 < 1.42f)
+    {
+        target2Collected = true;
+        Target2.SetActive(false);
+    }
+    if(target1Collected & target2Collected)
+    {
+        SetReward(1.0f);
+        EndEpisode();
+    }
+    else if (this.transform.localPosition.y < 0)
+    {
+        EndEpisode();
+    }
+}
+}
+```
+3. Также создал несколько моделей и обучил их, по итогу получил результат:
+
+![bandicam 2022-10-19 22-02-14-539](https://user-images.githubusercontent.com/101480666/196782073-fc0db72a-6eae-43ff-ad45-64c6a3515bd2.gif)
+
+## Выводы
+
+1. Пока занимался обучением модели я понял, что при увеличении количества копий, модель обучается быстрее. Также научился работать с ML-агентом, понял как пишется код для обучения ИИ, а еще увидел как получить результат обучения.
+
+2. Насчет игрового баланса могу сказать одно, в случае с компьютерными играми, это нахождение равновесия между персонажими, механиками, характеристиками и т.д. Также баланс существует даже в одиночных играх, но ключевую важность баланс имеет в играх многопользовательского характера.
+
+3. Еще одиним важным аспектом баланса является математика, важно все правильно просчитать, чтобы игроку было интересно играть, не супер сложные миссии, но в то же время не самые легкие. Также надо сделать, чтобы игрок на протяжении всей игры находился в золотой середине, а не так, что через полчаса игры он стал очень сильным и начал проходить игру с легкостью, в такой ситуации игрок в игре долго не задержится, поэтому нужно четко продумать его развитие, сделать приятный и интересный баланс для него. Однако, нейросети могут очень сильно подсобить в деле баланса, некоторые из них могут подстраивать баланс игры под хар-ки основного персонажа, по мере прохождения игроком игры, они могут увеличивать хар-ки других персонажей, чтобы вместе с основным героем также развивался и мир вокруг него, тем самым игрок постоянно будет находится в развитии и ему будет интересно.
+
+| Plugin | README |
+| ------ | ------ |
+| Dropbox | [plugins/dropbox/README.md][PlDb] |
+| GitHub | [plugins/github/README.md][PlGh] |
+| Google Drive | [plugins/googledrive/README.md][PlGd] |
+| OneDrive | [plugins/onedrive/README.md][PlOd] |
+| Medium | [plugins/medium/README.md][PlMe] |
+| Google Analytics | [plugins/googleanalytics/README.md][PlGa] |
 
 
 
