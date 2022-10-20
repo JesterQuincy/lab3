@@ -45,7 +45,7 @@ o	ml-agents-release_19 / com,unity.ml-agents / package.json
 o	ml-agents-release_19 / com,unity.ml-agents.extensions / package.json
 ![image](https://user-images.githubusercontent.com/114616168/196903982-185e9bb8-6071-499f-91b6-34cbc0e610e6.png)
 
-·	Если все сделано правильно, то во вкладке с компонентами (Components) внутри Unity вы увидите строку ML Agent.
+Видим строку ML Agent.
 ![image](https://user-images.githubusercontent.com/114616168/196904119-34db1dab-d17e-413b-b967-2c235e723555.png)
 
 ·	Далее запускаем Anaconda Prompt для возможности запуска команд через консоль.
